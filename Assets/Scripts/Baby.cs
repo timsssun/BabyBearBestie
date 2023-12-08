@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BabyState { Idle, Crying, BuildUp, Faking }
+public enum BabyState { Idle, Crying, BuildUp, Angry, Happy, Faking }
 
 public class Baby : MonoBehaviour {
 
 	[SerializeField] private Vector2 m_CryIntervalRange;
 	[SerializeField] private Vector2 m_CryDurationRange;
 	[SerializeField] private Vector2 m_BuildUpRange;
+	[SerializeField] private float m_AngryDuration;
+	[SerializeField] private float m_HappyDuration;
 
 	[Space(10)]
 
-	[SerializeField] private GameObject m_CryingIndicator;
-	[SerializeField] private GameObject m_IdleIndicator;
-	[SerializeField] private GameObject m_FakingIndicator;
-	[SerializeField] private GameObject m_BuildUpIndicator;
+	[SerializeField] private Animator m_Animator;
+
+	[Space(10)]
+
+	[SerializeField] private SoundArray[] m_Sounds;
+	[SerializeField] private AudioSource m_Source;
 
 	public bool IsCrying {
 		get { return this.State == BabyState.Crying; }
@@ -27,30 +31,32 @@ public class Baby : MonoBehaviour {
 	private BabyState State { get; set; }
 
 	private void Start() {
-		Relax();
+		SetState(BabyState.Idle, m_CryIntervalRange, true);
 	}
 
 	private void Update() {
-		switch (this.State) {
-			case BabyState.Idle:
-				m_IdleIndicator.SetActive(true);
-				if (Time.time - this.CurrentStateStartTime > this.CurrentStateDuration) {
+		bool isStateOver = Time.time - this.CurrentStateStartTime > this.CurrentStateDuration;
+		if (isStateOver) {
+			switch (this.State) {
+				case BabyState.Idle:
 					BuildUp();
-				}
-				break;
-			case BabyState.Crying:
-				if (Time.time - this.CurrentStateStartTime > this.CurrentStateDuration) {
-					Relax();
-				}
-				break;
-			case BabyState.BuildUp:
-				if (Time.time - this.CurrentStateStartTime > this.CurrentStateDuration) {
+					break;
+				case BabyState.Crying:
+					Angry();
+					break;
+				case BabyState.BuildUp:
 					Cry();
-				}
-				break;
-			case BabyState.Faking:
-				m_FakingIndicator.SetActive(true);
-				break;
+					break;
+				case BabyState.Angry:
+					Relax();
+					break;
+				case BabyState.Happy:
+					Relax();
+					break;
+				case BabyState.Faking:
+					Relax();
+					break;
+			}
 		}
 	}
 
@@ -66,31 +72,28 @@ public class Baby : MonoBehaviour {
 		SetState(BabyState.Idle, m_CryIntervalRange);
 	}
 
-	public void SetState(BabyState state, Vector2 durationRange) {
-		this.CurrentStateDuration = Random.Range(durationRange.x, durationRange.y);
-		this.State = state;
-		this.CurrentStateStartTime = Time.time;
-		SetVisuals();
+	public void Happy() {
+		SetState(BabyState.Happy, new Vector2(m_HappyDuration, m_HappyDuration));
+	}
+
+	public void Angry() {
+		SetState(BabyState.Angry, new Vector2(m_AngryDuration, m_AngryDuration));
+	}
+
+	public void SetState(BabyState state, Vector2 durationRange, bool force = false) {
+		if (this.State != state || force) {
+			this.CurrentStateDuration = Random.Range(durationRange.x, durationRange.y);
+			this.State = state;
+			this.CurrentStateStartTime = Time.time;
+			SetVisuals();
+		}
 	}
 
 	private void SetVisuals() {
-		m_CryingIndicator.SetActive(false);
-		m_IdleIndicator.SetActive(false);
-		m_FakingIndicator.SetActive(false);
-		m_BuildUpIndicator.SetActive(false);
-		switch (this.State) {
-			case BabyState.Idle:
-				m_IdleIndicator.SetActive(true);
-				break;
-			case BabyState.Crying:
-				m_CryingIndicator.SetActive(true);
-				break;
-			case BabyState.BuildUp:
-				m_BuildUpIndicator.SetActive(true);
-				break;
-			case BabyState.Faking:
-				m_FakingIndicator.SetActive(true);
-				break;
+		m_Animator.SetInteger("State", (int)this.State);
+		AudioClip clip = m_Sounds[(int)this.State].GetRandomAudioClip();
+		if (clip != null) {
+			m_Source.PlayOneShot(clip);
 		}
 	}
 
