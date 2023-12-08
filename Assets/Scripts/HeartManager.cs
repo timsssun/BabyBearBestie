@@ -18,6 +18,9 @@ public class HeartManager : MonoBehaviour {
 
 	private void SetColor(int heartIndex, Color color) {
 		if (heartIndex >= 0 && heartIndex < m_Hearts.Length) {
+			if (m_Hearts[heartIndex].SpriteRenderer.color != color) {
+				m_Hearts[heartIndex].Animator.SetTrigger("Beat");
+			}
 			m_Hearts[heartIndex].SpriteRenderer.color = color;
 		}
 	}
