@@ -36,7 +36,7 @@ public class Manager : MonoBehaviour {
 			this.HasPressed[i] = false;
 			m_Parents[i].InitializeParent(m_ParentStartHeartLevel);
 		}
-		m_Baby.UpdateBaby();
+		m_Baby.InitializeBaby();
 	}
 
 	private void Update() {
@@ -71,7 +71,7 @@ public class Manager : MonoBehaviour {
 						if (m_Baby.IsCrying) {
 							parent.IncreaseHeartLevel();
 							otherParent.DecreaseHeartLevel();
-							m_Baby.Relax();
+							m_Baby.Happy();
 						} else {
 							if (!this.WasPressing[i]) {
 								parent.DecreaseHeartLevel();
@@ -88,6 +88,7 @@ public class Manager : MonoBehaviour {
 				m_HeartManager.SetColors(m_Parents[0].HeartLevel, m_Parents[0].HeartColor, m_Parents[1].HeartColor);
 				if (shouldEndGame) {
 					this.State = GameState.End;
+					ResetAllPressed();
 				}
 				break;
 			case GameState.End:

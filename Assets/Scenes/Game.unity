@@ -512,7 +512,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 216abc20477ef4f45bb82e0d4761c16f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Clips: []
+  m_Clips:
+  - {fileID: 8300000, guid: 4711940347f7c4e2698d0fa878be4ece, type: 3}
+  - {fileID: 8300000, guid: ea897326fc0314767a5e7492fd1ddce9, type: 3}
+  m_LayeredClip: {fileID: 8300000, guid: edfd6c940a693432eb09607274fe90ec, type: 3}
 --- !u!1001 &640503033
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1070,6 +1073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Clips: []
+  m_LayeredClip: {fileID: 0}
 --- !u!1 &975083639
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,7 +1838,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 216abc20477ef4f45bb82e0d4761c16f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Clips: []
+  m_Clips:
+  - {fileID: 8300000, guid: 6fda02705a2584d6d84134915e0e5928, type: 3}
+  - {fileID: 8300000, guid: 69b473b0f54714e71b88aa3c83b25872, type: 3}
+  - {fileID: 8300000, guid: 1cb03751274eb41f1860be320f39bc4e, type: 3}
+  m_LayeredClip: {fileID: 8300000, guid: 6b686a34430194b589e4bf83d5a34abe, type: 3}
 --- !u!1 &1387820030
 GameObject:
   m_ObjectHideFlags: 0
@@ -2257,7 +2265,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 216abc20477ef4f45bb82e0d4761c16f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Clips: []
+  m_Clips:
+  - {fileID: 8300000, guid: 89ccaba50f2514155ab2373efeedb6fd, type: 3}
+  - {fileID: 8300000, guid: 77425ec9a0a1d49979cab7cc522687c5, type: 3}
+  m_LayeredClip: {fileID: 8300000, guid: 6b686a34430194b589e4bf83d5a34abe, type: 3}
 --- !u!1 &1523372254
 GameObject:
   m_ObjectHideFlags: 0
@@ -2755,6 +2766,7 @@ MonoBehaviour:
   m_Clips:
   - {fileID: 8300000, guid: 971144e0c9a3b458aaf3c5fd30a8c58d, type: 3}
   - {fileID: 8300000, guid: 256f1366f72c04b1f92067cd3ace0048, type: 3}
+  m_LayeredClip: {fileID: 8300000, guid: 573f6453680364b15966d0d73d5aafe2, type: 3}
 --- !u!1 &2028306950
 GameObject:
   m_ObjectHideFlags: 0
@@ -2800,6 +2812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Clips: []
+  m_LayeredClip: {fileID: 0}
 --- !u!1 &2070805906
 GameObject:
   m_ObjectHideFlags: 0

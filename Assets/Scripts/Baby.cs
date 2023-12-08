@@ -95,6 +95,10 @@ public class Baby : MonoBehaviour {
 		if (clip != null) {
 			m_Source.PlayOneShot(clip);
 		}
+		AudioClip layeredClip = m_Sounds[(int)this.State].GetLayeredClip();
+		if (layeredClip != null) {
+			m_Source.PlayOneShot(layeredClip);
+		}
 	}
 
 }
