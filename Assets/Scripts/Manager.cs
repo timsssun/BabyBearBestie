@@ -28,6 +28,10 @@ public class Manager : MonoBehaviour {
 
 	[SerializeField] AudioSource m_AudioSource;
 
+	[SerializeField] AudioClip m_GameLoop;
+	[SerializeField] AudioClip m_StartMusic;
+	[SerializeField] AudioSource m_MusicSource;
+
 	[Space(10)]
 
 	[SerializeField] private int m_ParentStartHeartLevel = 5;
@@ -48,6 +52,7 @@ public class Manager : MonoBehaviour {
 	private void Start() {
 		m_StartScreen.SetActive(false);
 		m_EndScreen.SetActive(false);
+		PlayMusic(m_StartMusic);
 		this.State = GameState.Beginning;
 		this.HasPressed = new bool[2];
 		this.WasPressing = new bool[2];
@@ -90,6 +95,7 @@ public class Manager : MonoBehaviour {
 					m_StartScreen.SetActive(false);
 					m_EndScreen.SetActive(false);
 					this.State = GameState.Play;
+					PlayMusic(m_GameLoop);
 				}
 				break;
 			case GameState.Play:
@@ -120,6 +126,7 @@ public class Manager : MonoBehaviour {
 				if (shouldEndGame) {
 					this.State = GameState.End;
 					this.EndStateStartedTime = Time.time;
+					PlayMusic(m_StartMusic);
 					ResetAllPressed();
 					m_EndScreen.SetActive(true);
 					m_LeftLoser.SetActive(false);
@@ -176,6 +183,12 @@ public class Manager : MonoBehaviour {
 		for (int i = 0; i < m_Parents.Length; i++) {
 			this.HasPressed[i] = false;
 		}
+	}
+
+	private void PlayMusic(AudioClip clip) {
+		m_MusicSource.Stop();
+		m_MusicSource.clip = clip;
+		m_MusicSource.Play();
 	}
 
 }
