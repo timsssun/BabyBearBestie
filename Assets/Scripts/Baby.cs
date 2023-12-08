@@ -11,6 +11,10 @@ public class Baby : MonoBehaviour {
 	[SerializeField] private Vector2 m_BuildUpRange;
 	[SerializeField] private float m_AngryDuration;
 	[SerializeField] private float m_HappyDuration;
+	[SerializeField] private float m_BurpDuration;
+
+	[Range(0f, 1f)]
+	[SerializeField] private float m_BurpProbability;
 
 	[Space(10)]
 
@@ -45,7 +49,11 @@ public class Baby : MonoBehaviour {
 					Angry();
 					break;
 				case BabyState.BuildUp:
-					Cry();
+					if (Random.Range(0f, 1f) < m_BurpProbability) {
+						Fake();
+					} else {
+						Cry();
+					}
 					break;
 				case BabyState.Angry:
 					Relax();
@@ -78,6 +86,10 @@ public class Baby : MonoBehaviour {
 
 	public void Angry() {
 		SetState(BabyState.Angry, new Vector2(m_AngryDuration, m_AngryDuration));
+	}
+
+	public void Fake() {
+		SetState(BabyState.Faking, new Vector2(m_BurpDuration, m_BurpDuration));
 	}
 
 	public void SetState(BabyState state, Vector2 durationRange, bool force = false) {

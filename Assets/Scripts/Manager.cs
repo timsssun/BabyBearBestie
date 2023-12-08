@@ -151,6 +151,7 @@ public class Manager : MonoBehaviour {
 					this.WinnerShown = true;
 				} else if (Time.time - this.EndStateStartedTime > 5) {
 					if (this.AllPressed) {
+						this.ReadyStateStartedTime = Time.time;
 						this.State = GameState.Ready;
 						Reset();
 						this.LoserShown = false;

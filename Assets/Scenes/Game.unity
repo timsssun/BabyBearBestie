@@ -1698,7 +1698,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 216abc20477ef4f45bb82e0d4761c16f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Clips: []
+  m_Clips:
+  - {fileID: 8300000, guid: 6188b6903c00c419e99c3f0c757804cd, type: 3}
+  - {fileID: 8300000, guid: 5e78cb403ba364f35bb11ba9fdf5f629, type: 3}
+  - {fileID: 8300000, guid: c388a46027bcf4100a2ea92b8aa140af, type: 3}
+  - {fileID: 8300000, guid: 8a644280976ca4d92b2b281fa88481d8, type: 3}
+  - {fileID: 8300000, guid: 179c66431d193409cbc0c4e3c47c331d, type: 3}
+  - {fileID: 8300000, guid: d33fc258711d843529b3b5244cc5ab18, type: 3}
+  - {fileID: 8300000, guid: 5fd5ddbe0397d4b048e2991c7eb2dadf, type: 3}
   m_LayeredClip: {fileID: 0}
 --- !u!1 &975083639
 GameObject:
@@ -2633,6 +2640,8 @@ MonoBehaviour:
   m_BuildUpRange: {x: 1, y: 2}
   m_AngryDuration: 1
   m_HappyDuration: 1
+  m_BurpDuration: 1
+  m_BurpProbability: 0.4
   m_Animator: {fileID: 1421270393}
   m_Sounds:
   - {fileID: 2028306952}
