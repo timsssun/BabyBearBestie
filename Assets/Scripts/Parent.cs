@@ -1,10 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
+public enum ParentState { Idle, Grabbing }
 
 public class Parent : MonoBehaviour {
 
-	private int MaxLevel = 10;
+	[SerializeField] private KeyCode m_InputKey;
 
+	[Space(10)]
+
+	[SerializeField] private GameObject m_IdleIndicator;
+	[SerializeField] private GameObject m_GrabIndicator;
+
+	[Space(10)]
+
+	[SerializeField] TextMeshPro m_LevelText;
+
+	private ParentState State { get; set; }
+	private int HeartLevel { get; set; }
+
+	public bool IsGrabbing {
+		get { return this.State == ParentState.Grabbing; }
+	}
+
+	private void Start() {
+		Relax();
+	}
+
+	private void Update() {
+		if (Input.GetKeyDown(m_InputKey)) {
+			Grab();
+		}
+		if (Input.GetKeyUp(m_InputKey)) {
+			Relax();
+		}
+	}
+
+	private void Grab() {
+		this.State = ParentState.Grabbing;
+		SetVisuals();
+	}
+
+	private void Relax() {
+		this.State = ParentState.Idle;
+		SetVisuals();
+	}
+
+	private void SetVisuals() {
+		m_IdleIndicator.SetActive(false);
+		m_GrabIndicator.SetActive(false);
+		switch (this.State) {
+			case ParentState.Idle:
+				m_IdleIndicator.SetActive(true);
+				break;
+			case ParentState.Grabbing:
+				m_GrabIndicator.SetActive(true);
+				break;
+		}
+	}
+
+	public void SetHeartLevel(int level) {
+		this.HeartLevel = level;
+		m_LevelText.text = this.HeartLevel.ToString();
+	}
+
+	public void IncreaseHeartLevel() {
+		this.HeartLevel++;
+		m_LevelText.text = this.HeartLevel.ToString();
+	}
 
 }
