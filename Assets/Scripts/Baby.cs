@@ -28,7 +28,7 @@ public class Baby : MonoBehaviour {
 	private float CurrentStateDuration { get; set; }
 	private float CurrentStateStartTime { get; set; }
 
-	private BabyState State { get; set; }
+	public BabyState State { get; private set; }
 
 	public void InitializeBaby() {
 		SetState(BabyState.Idle, m_CryIntervalRange, true);
