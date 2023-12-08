@@ -13,6 +13,8 @@ public class Parent : MonoBehaviour {
 
 	[SerializeField] private Color m_HeartColor;
 
+	[SerializeField] private Animator m_Animator;
+
 	[SerializeField] private GameObject m_IdleIndicator;
 	[SerializeField] private GameObject m_GrabIndicator;
 
@@ -60,6 +62,7 @@ public class Parent : MonoBehaviour {
 				m_IdleIndicator.SetActive(true);
 				break;
 			case ParentState.Grabbing:
+				m_Animator.SetTrigger("Grab");
 				m_GrabIndicator.SetActive(true);
 				break;
 		}
