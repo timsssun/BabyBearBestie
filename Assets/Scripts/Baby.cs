@@ -30,11 +30,11 @@ public class Baby : MonoBehaviour {
 
 	private BabyState State { get; set; }
 
-	private void Start() {
+	public void InitializeBaby() {
 		SetState(BabyState.Idle, m_CryIntervalRange, true);
 	}
 
-	private void Update() {
+	public void UpdateBaby() {
 		bool isStateOver = Time.time - this.CurrentStateStartTime > this.CurrentStateDuration;
 		if (isStateOver) {
 			switch (this.State) {

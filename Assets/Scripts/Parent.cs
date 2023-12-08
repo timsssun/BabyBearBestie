@@ -22,16 +22,18 @@ public class Parent : MonoBehaviour {
 
 	private ParentState State { get; set; }
 	public int HeartLevel { get; private set; }
+	public Color HeartColor => m_HeartColor;
 
 	public bool IsGrabbing {
 		get { return this.State == ParentState.Grabbing; }
 	}
 
-	private void Start() {
+	public void InitializeParent(int level) {
+		SetHeartLevel(level);
 		Relax();
 	}
 
-	private void Update() {
+	public void UpdateParent() {
 		if (Input.GetKeyDown(m_InputKey)) {
 			Grab();
 		}

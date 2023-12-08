@@ -9,6 +9,8 @@ public class Manager : MonoBehaviour {
 	[SerializeField] Baby m_Baby;
 	[SerializeField] Parent[] m_Parents;
 
+	[SerializeField] HeartManager m_HeartManager;
+
 	[SerializeField] GameObject m_StartScreen;
 	[SerializeField] GameObject m_EndScreen;
 
@@ -20,21 +22,27 @@ public class Manager : MonoBehaviour {
 	private bool AllPressed { get; set; }
 	private GameState State { get; set; }
 
+	private bool[] WasPressing { get; set; }
+
 	private void Start() {
 		m_StartScreen.SetActive(false);
 		m_EndScreen.SetActive(false);
 		this.State = GameState.Beginning;
 		this.HasPressed = new bool[2];
+		this.WasPressing = new bool[2];
 		this.AllPressed = false;
 		for (int i = 0; i < m_Parents.Length; i++) {
+			this.WasPressing[i] = false;
 			this.HasPressed[i] = false;
-			m_Parents[i].SetHeartLevel(m_ParentStartHeartLevel);
+			m_Parents[i].InitializeParent(m_ParentStartHeartLevel);
 		}
+		m_Baby.UpdateBaby();
 	}
 
 	private void Update() {
 		bool hasAllPressed = true;
 		for (int i = 0; i < m_Parents.Length; i++) {
+			m_Parents[i].UpdateParent();
 			if (m_Parents[i].IsGrabbing) {
 				this.HasPressed[i] = true;
 			}
@@ -47,35 +55,47 @@ public class Manager : MonoBehaviour {
 		switch (this.State) {
 			case GameState.Beginning:
 				m_StartScreen.SetActive(true);
-				m_EndScreen.SetActive(false);
 				if (this.AllPressed) {
+					m_StartScreen.SetActive(false);
 					ResetAllPressed();
 					this.State = GameState.Play;
 				}
 				break;
 			case GameState.Play:
+				m_Baby.UpdateBaby();
+				bool shouldEndGame = false;
 				for (int i = 0; i < m_Parents.Length; i++) {
 					Parent parent = m_Parents[i];
+					Parent otherParent = m_Parents[(i + 1) % 2];
 					if (parent.IsGrabbing) {
 						if (m_Baby.IsCrying) {
 							parent.IncreaseHeartLevel();
-							m_Baby.Happy();
+							otherParent.DecreaseHeartLevel();
+							m_Baby.Relax();
 						} else {
-							parent.DecreaseHeartLevel();
-							m_Baby.Angry();
+							if (!this.WasPressing[i]) {
+								parent.DecreaseHeartLevel();
+								otherParent.IncreaseHeartLevel();
+								m_Baby.Angry();
+							}
 						}
 					}
+					this.WasPressing[i] = parent.IsGrabbing;
 					if (parent.HeartLevel >= 10) {
-						this.State = GameState.End;
+						shouldEndGame = true;
 					}
+				}
+				m_HeartManager.SetColors(m_Parents[0].HeartLevel, m_Parents[0].HeartColor, m_Parents[1].HeartColor);
+				if (shouldEndGame) {
+					this.State = GameState.End;
 				}
 				break;
 			case GameState.End:
-				m_StartScreen.SetActive(false);
 				m_EndScreen.SetActive(true);
 				if (this.AllPressed) {
 					ResetAllPressed();
 					this.State = GameState.Beginning;
+					m_EndScreen.SetActive(false);
 				}
 				break;
 		}
