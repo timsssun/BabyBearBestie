@@ -15,16 +15,12 @@ public class Parent : MonoBehaviour {
 
 	[SerializeField] private Animator m_Animator;
 
-	[SerializeField] private GameObject m_IdleIndicator;
-	[SerializeField] private GameObject m_GrabIndicator;
-
-	[Space(10)]
-
-	[SerializeField] TextMeshPro m_LevelText;
+	[SerializeField] private ParticleSystem m_HeartParticle;
 
 	private ParentState State { get; set; }
 	public int HeartLevel { get; private set; }
 	public Color HeartColor => m_HeartColor;
+	public ParticleSystem HeartParticles => m_HeartParticle;
 
 	public bool IsGrabbing {
 		get { return this.State == ParentState.Grabbing; }
@@ -55,32 +51,25 @@ public class Parent : MonoBehaviour {
 	}
 
 	private void SetVisuals() {
-		m_IdleIndicator.SetActive(false);
-		m_GrabIndicator.SetActive(false);
 		switch (this.State) {
 			case ParentState.Idle:
-				m_IdleIndicator.SetActive(true);
 				break;
 			case ParentState.Grabbing:
 				m_Animator.SetTrigger("Grab");
-				m_GrabIndicator.SetActive(true);
 				break;
 		}
 	}
 
 	public void SetHeartLevel(int level) {
 		this.HeartLevel = level;
-		m_LevelText.text = this.HeartLevel.ToString();
 	}
 
 	public void IncreaseHeartLevel() {
 		this.HeartLevel++;
-		m_LevelText.text = this.HeartLevel.ToString();
 	}
 
 	public void DecreaseHeartLevel() {
 		this.HeartLevel = Mathf.Max(0, this.HeartLevel - 1);
-		m_LevelText.text = this.HeartLevel.ToString();
 	}
 
 }

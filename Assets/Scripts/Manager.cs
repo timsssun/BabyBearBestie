@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState { Beginning, Ready, Play, End }
+public enum GameState { Beginning, Ready, Play, Results, End }
 
 public class Manager : MonoBehaviour {
 
@@ -22,6 +22,8 @@ public class Manager : MonoBehaviour {
 
 	[SerializeField] GameObject m_LeftLoser;
 	[SerializeField] GameObject m_RightLoser;
+
+	[SerializeField] GameObject m_EndReadyHolder;
 
 	[SerializeField] AudioClip m_WinSound;
 	[SerializeField] AudioClip m_LoseSound;
@@ -57,6 +59,7 @@ public class Manager : MonoBehaviour {
 		this.HasPressed = new bool[2];
 		this.WasPressing = new bool[2];
 		Reset();
+		ResetAllPressed();
 	}
 
 	private void Update() {
@@ -107,6 +110,7 @@ public class Manager : MonoBehaviour {
 					if (parent.IsGrabbing) {
 						if (m_Baby.IsCrying) {
 							parent.IncreaseHeartLevel();
+							parent.HeartParticles.Play();
 							otherParent.DecreaseHeartLevel();
 							m_Baby.Happy();
 						} else if (m_Baby.State != BabyState.Angry) {
@@ -124,7 +128,8 @@ public class Manager : MonoBehaviour {
 				}
 				m_HeartManager.SetColors(m_Parents[0].HeartLevel, m_Parents[0].HeartColor, m_Parents[1].HeartColor);
 				if (shouldEndGame) {
-					this.State = GameState.End;
+					this.State = GameState.Results;
+					m_EndReadyHolder.SetActive(false);
 					this.EndStateStartedTime = Time.time;
 					PlayMusic(m_StartMusic);
 					ResetAllPressed();
@@ -135,7 +140,7 @@ public class Manager : MonoBehaviour {
 					m_RightWinner.SetActive(false);
 				}
 				break;
-			case GameState.End:
+			case GameState.Results:
 				if (Time.time - this.EndStateStartedTime < 1) {
 					//nothing
 				} else if (Time.time - this.EndStateStartedTime > 1 && !this.LoserShown) {
@@ -157,29 +162,33 @@ public class Manager : MonoBehaviour {
 					}
 					this.WinnerShown = true;
 				} else if (Time.time - this.EndStateStartedTime > 5) {
-					if (this.AllPressed) {
-						this.ReadyStateStartedTime = Time.time;
-						this.State = GameState.Ready;
-						Reset();
-						this.LoserShown = false;
-						this.WinnerShown = false;
-					}
+					this.State = GameState.End;
+					m_EndReadyHolder.SetActive(true);
+					ResetAllPressed();
+				}
+				break;
+			case GameState.End:
+				if (this.AllPressed) {
+					this.ReadyStateStartedTime = Time.time;
+					this.State = GameState.Ready;
+					Reset();
+					this.LoserShown = false;
+					this.WinnerShown = false;
 				}
 				break;
 		}
 	}
 
 	private void Reset() {
-		this.AllPressed = false;
 		for (int i = 0; i < m_Parents.Length; i++) {
 			this.WasPressing[i] = false;
-			this.HasPressed[i] = false;
 			m_Parents[i].InitializeParent(m_ParentStartHeartLevel);
 		}
 		m_Baby.InitializeBaby();
 	}
 
 	private void ResetAllPressed() {
+		this.AllPressed = false;
 		for (int i = 0; i < m_Parents.Length; i++) {
 			this.HasPressed[i] = false;
 		}
