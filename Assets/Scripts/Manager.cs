@@ -43,6 +43,7 @@ public class Manager : MonoBehaviour {
 	private GameState State { get; set; }
 
 	private float ReadyStateStartedTime { get; set; }
+	private float BeginningStateStartedTime { get; set; }
 
 	private float EndStateStartedTime { get; set; }
 
@@ -56,6 +57,7 @@ public class Manager : MonoBehaviour {
 		m_EndScreen.SetActive(false);
 		PlayMusic(m_StartMusic);
 		this.State = GameState.Beginning;
+		this.BeginningStateStartedTime = Time.time;
 		this.HasPressed = new bool[2];
 		this.WasPressing = new bool[2];
 		Reset();
@@ -84,7 +86,7 @@ public class Manager : MonoBehaviour {
 		switch (this.State) {
 			case GameState.Beginning:
 				m_StartScreen.SetActive(true);
-				if (this.AllPressed) {
+				if (Time.time - this.BeginningStateStartedTime > 1f && this.AllPressed) {
 					this.ReadyStateStartedTime = Time.time;
 					this.State = GameState.Ready;
 				}
@@ -169,8 +171,11 @@ public class Manager : MonoBehaviour {
 				break;
 			case GameState.End:
 				if (this.AllPressed) {
+					m_EndScreen.SetActive(false);
 					this.ReadyStateStartedTime = Time.time;
-					this.State = GameState.Ready;
+					this.State = GameState.Beginning;
+					this.BeginningStateStartedTime = Time.time;
+					ResetAllPressed();
 					Reset();
 					this.LoserShown = false;
 					this.WinnerShown = false;
