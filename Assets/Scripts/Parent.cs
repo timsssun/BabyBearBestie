@@ -16,11 +16,13 @@ public class Parent : MonoBehaviour {
 	[SerializeField] private Animator m_Animator;
 
 	[SerializeField] private ParticleSystem m_HeartParticle;
+	[SerializeField] private ParticleSystem m_AngryParticle;
 
 	private ParentState State { get; set; }
 	public int HeartLevel { get; private set; }
 	public Color HeartColor => m_HeartColor;
 	public ParticleSystem HeartParticles => m_HeartParticle;
+	public ParticleSystem AngryParticle => m_AngryParticle;
 
 	public bool IsGrabbing {
 		get { return this.State == ParentState.Grabbing; }

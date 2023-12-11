@@ -118,6 +118,7 @@ public class Manager : MonoBehaviour {
 						} else if (m_Baby.State != BabyState.Angry) {
 							if (!this.WasPressing[i]) {
 								parent.DecreaseHeartLevel();
+								parent.AngryParticle.Play();
 								otherParent.IncreaseHeartLevel();
 								m_Baby.Angry();
 							}
